@@ -14,4 +14,8 @@
     <Content Remove="Pages\Privacy.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
+  </ItemGroup>
+
 </Project>
