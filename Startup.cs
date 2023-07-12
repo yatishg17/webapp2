@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NWebsec.AspNetCore.Middleware;
 
-
 namespace webapp.Pages
 {
     public class Startup
@@ -52,30 +51,20 @@ namespace webapp.Pages
             app.UseNWebsecMiddleware(); // Add NWebsec middleware
 
             app.UseXContentTypeOptions();
-
             app.UseXfo(options => options.Deny());
-
             app.UseXXssProtection(options => options.EnabledWithBlockMode());
-
             app.UseReferrerPolicy(opts => opts.NoReferrer());
 
             app.UseCsp(options => options
-    .BlockAllMixedContent()
-    .DefaultSources(s => s.Self())
-    .FontSources(s => s.Self()
-        .CustomSources("https://testwebsite001.sealz-dit.se.com")
-    )
-    .FrameAncestors(s => s.None())
-    .FrameSources(s => s.None())
-    .UpgradeInsecureRequests()
-);
-            public static IHostBuilder CreateHostBuilder(string[] args) =>
-    Host.CreateDefaultBuilder(args)
-        .ConfigureWebHostDefaults(webBuilder =>
-        {
-            webBuilder.UseStartup<Startup>();
-            webBuilder.ConfigureKestrel(o => o.AddServerHeader = false);
-        });
+                .BlockAllMixedContent()
+                .DefaultSources(s => s.Self())
+                .FontSources(s => s.Self()
+                    .CustomSources("https://testwebsite001.sealz-dit.se.com")
+                )
+                .FrameAncestors(s => s.None())
+                .FrameSources(s => s.None())
+                .UpgradeInsecureRequests()
+            );
 
             app.UseCookiePolicy(new CookiePolicyOptions
             {
@@ -84,9 +73,12 @@ namespace webapp.Pages
                 Secure = CookieSecurePolicy.Always
             });
 
-
-
-
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }
